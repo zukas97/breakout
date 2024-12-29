@@ -77,6 +77,7 @@ void input(bool* running) {
 						break;
 					case SDLK_LEFT:
 						bar.direction = LEFT;
+						break;
 					case SDLK_RIGHT:
 						bar.direction = RIGHT;
 						break;
@@ -125,6 +126,7 @@ void update(float* delta, SDL_Rect* rect, float* angle) {
 	//rect->y += 10 * *delta;
 	//
 	
+	/*
 	if (rect->x >= WIN_WIDTH) {
 		//angle = 360.0f - angle;
 		//speed = -5.0f;
@@ -138,6 +140,14 @@ void update(float* delta, SDL_Rect* rect, float* angle) {
 	}
 	else if (rect->y >= WIN_HEIGHT) {
 		*angle = 180.0f;
+	}
+	*/
+
+	if (bar.rect.x <= 10 && bar.direction == LEFT) {
+		bar.direction = ZERO;
+	}
+	else if (bar.rect.x >= (WIN_WIDTH - (bar.rect.w + 10)) && bar.direction == RIGHT) {
+		bar.direction = ZERO;
 	}
 
 	switch (bar.direction) {
@@ -154,15 +164,16 @@ void update(float* delta, SDL_Rect* rect, float* angle) {
 			bar.rect.y += bar.speed;// * *delta;
 			break;
 		case ZERO:
+			bar.rect.x += 0;
+			bar.rect.y += 0;
 			break;
 	}
 	
 
-	if (bar.rect.x <= 5) {
-		bar.direction = ZERO;
-	}
-	else if (bar.rect.x >= WIN_WIDTH + 5) {
-		bar.direction = ZERO;
+	if (SDL_HasIntersection(&bar.rect, &ball.rect)) {
+		bar.angle *= 2;
+		bar.angle += 180;
+		printf("intersect\n");
 	}
 	
 
